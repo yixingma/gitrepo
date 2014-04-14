@@ -23,13 +23,22 @@ war {
 repositories {
     mavenCentral()
     maven { url "http://repo.spring.io/libs-snapshot" }
+    maven { url "http://repository.jboss.org/nexus/content/groups/public-jboss/"}
 }
 
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-web")
+    compile("org.springframework.boot:spring-boot-starter-websocket")
+    compile("org.springframework:spring-messaging")
     compile("com.fasterxml.jackson.core:jackson-databind")
     compile("org.thymeleaf:thymeleaf-spring4")
-    compile("log4j:log4j:1.2.16")
+    compile("commons-codec:commons-codec:1.5")
+    compile group: 'commons-io', name: 'commons-io', version: '2.0.1'
+    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.+'
+    compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.+'
+    compile group: 'org.hibernate.ogm', name: 'hibernate-ogm-core', version: '4.1.0.Beta1'
+    compile group: 'org.hibernate.ogm', name: 'hibernate-ogm-mongodb', version: '4.1.0.Beta1'
+    testCompile group: 'org.hibernate.javax.persistence', name: 'hibernate-jpa-2.0-api', version: '1.0.1.Final'
     testCompile("junit:junit")
 }
 
