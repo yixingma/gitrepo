@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+    version="2.5">
+
+    <display-name>JNI Rest App</display-name>
+    <description>JNI Rest App</description>
+
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath:config/application-config.xml</param-value>
+    </context-param>
+
+    <!--| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        | Loads the Spring Framework application context when web application initializes,
+        | using the value of the 'contextConfigLocation' parameter
+        | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+
+    
+    
+    <!--| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        | Enables JACC-based authentication and coarse-grained security; 
+        | (by "coarse-grained", we mean at the service operation level, )
+        | fine-grained ("
+        |
+        | TODO: CUSTOMIZATION_REQUIRED
+        | uncomment the 'login-config', 'security-role' and 'security-constraint' definitions
+        | below to enable role-based-access-configuration for your services.
+        |
+        | In the provided example, there is a single security constraint defined, which
+        | determines access for all resources "/*"; you may wish to define multiple 
+        | constraints in the case that you're exposing endpoints for more than one service 
+        | through this endpoint module (and those endpoints require different roles); in
+        | that case, simply create 'security-constraint's, one for each different endpoint
+        | configuration.  
+        |
+        | Note that we've defined 2 roles here, but they're both granted access to the same
+        | security-constraint -=- why do we need 2 roles? For simple access purposes, we don't;
+        | but the role-distinctions can be used later within method-based security annotations
+        | to control access to individual methods.
+        | 
+        | When using JACC, we have to define all of the roles that we plan to use here in
+        | the web.xml in 'security-role' elements (or using the @DeclareRoles annotation);
+        | the set of roles is essentially static.
+        | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <!-- Configure authentication method: this can be overridden by the container
+         to a more robust/secure strategy; we use BASIC here as a place-holder -->
+    <!-- 
+    <login-config>
+        <auth-method>BASIC</auth-method>
+    </login-config>
+    -->
+    
+    <!-- Define roles -->
+    <!-- 
+    <security-role>
+        <role-name>ROLE_USER</role-name>
+    </security-role>
+    
+    <security-role>
+        <role-name>ROLE_ADMIN</role-name>
+    </security-role>
+    -->
+    
+    <!--  
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Secured Services</web-resource-name>
+            <url-pattern>/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>ROLE_USER</role-name>
+            <role-name>ROLE_ADMIN</role-name>
+        </auth-constraint>
+    </security-constraint>  
+    -->
+</web-app>
