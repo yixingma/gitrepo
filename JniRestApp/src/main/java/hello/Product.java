@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class Product implements Serializable {
 	/**
-	 * 
+	 * This is a TEST TODO: Remove
 	 */
 	private static final long serialVersionUID = 1L;
 	public long id;

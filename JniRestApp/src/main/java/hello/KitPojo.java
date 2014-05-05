@@ -2,7 +2,7 @@ package hello;
 
 import java.io.Serializable;
 
-public class Kit implements Serializable {
+public class KitPojo implements Serializable {
 
 	/**
 	 * 

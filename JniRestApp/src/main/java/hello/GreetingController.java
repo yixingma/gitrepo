@@ -8,7 +8,10 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,13 +19,21 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.invy.database.DemoRepository;
+import com.invy.database.jpa.data.Itemref;
+import com.invy.database.jpa.data.Kit;
+import com.invy.database.jpa.data.Location;
+import com.invy.database.jpa.data.Owner;
+
 @Controller
 public class GreetingController {
 
 	private static final String template = "Hello, %s!";
 	private final AtomicLong counter = new AtomicLong();
 	static final Logger LOG = LoggerFactory.getLogger(GreetingController.class);
-
+	@Autowired
+	DemoRepository demoRepository;
+	
 	@RequestMapping("/greeting")
 	public @ResponseBody
 	Greeting greeting(
@@ -55,7 +66,8 @@ public class GreetingController {
 		LOG.error("I am programming.");
 		return greetingInstance;
 	}
-
+	//THIS IS A TEST
+	//TODO: Remove
 	@RequestMapping(value = "/addProducts", method = RequestMethod.POST, consumes = "application/json")
 	public @ResponseBody
 	Greeting addMultipleArticlesTocart(
@@ -68,12 +80,44 @@ public class GreetingController {
 		return greetingInstance;
 	}
 
+	@Transactional
 	@RequestMapping(value = "/uploadKits", method = RequestMethod.POST, consumes = "application/json")
 	public @ResponseBody
-	List<ItemInstance> uploadKits(@RequestBody final List<Kit> kits) {
+	List<ItemInstance> uploadKits(@RequestBody final List<KitPojo> kits) {
+		LOG.info("TX:"+TransactionSynchronizationManager.getCurrentTransactionName()+TransactionSynchronizationManager.isActualTransactionActive());
+		List<Kit> kitDatas = demoRepository.getKitsByUserId("jdoe");
+		for(Kit kitData:kitDatas){
+			LOG.info("kitData = "+kitData);
+		}
+		
+//		Itemref newItemRef = new Itemref();
+//		newItemRef.setDescription("#2 Item");
+//		newItemRef.setName("ref2");
+//		newItemRef.setUnitPrice(Double.valueOf(35));
+//		Location location = new Location();
+//		location.setName("root");
+//		location.setType("root");
+		Location location = demoRepository.findById(1, Location.class);
+		LOG.info("Location = "+location);
+		Owner owner = new Owner();
+		owner.setFirstname("Ethan");
+		owner.setLastname("Ma");
+		owner.setLocation(location);
+		owner.setUserId("ema");
+		LOG.info("Add object");
+		demoRepository.addObject(owner);
+		LOG.info("Add object done!");
+		List<Itemref> itemRefs = demoRepository.getAllItemrefs();
+		for(Itemref itemRef:itemRefs){
+			LOG.info("itemRef = "+itemRef);
+		}
+		List<Itemref> itemRefs2 = demoRepository.searchItemrefsByName("te");
+		for(Itemref itemRef:itemRefs2){
+			LOG.info("itemRef2 = "+itemRef);
+		}
 		HelloJNI helloJNI = new HelloJNI();
 		List<ItemInstance> l2 = new ArrayList<ItemInstance>();
-		for (Kit kit : kits) {
+		for (KitPojo kit : kits) {
 			LOG.info("kit = " + kit);
 			LOG.info("kit description = " + kit.getDescription());
 			// LOG.info("kit image = " + new String(kit.getImage()));

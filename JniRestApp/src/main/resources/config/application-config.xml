@@ -7,7 +7,9 @@
             http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd 
             http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd 
             http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
-
+    <tx:annotation-driven />
+    <context:component-scan  base-package="com.invy.database"/>
+    <tx:jta-transaction-manager/>
 <!-- 	<bean id="propertyConfigurer" -->
 <!-- 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"> -->
 <!-- 		<property name="location"> -->
@@ -17,4 +19,112 @@
 		
 <!-- 	</bean> -->
 	<context:property-placeholder location="classpath:default.properties" />
+	    <bean id="setSystemProperties" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="targetObject">
+            <!-- System.getProperties() -->
+            <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+                <property name="targetClass" value="java.lang.System" />
+                <property name="targetMethod" value="getProperties" />
+            </bean>
+        </property>
+        <property name="targetMethod" value="putAll" />
+        <property name="arguments">
+            <!-- The new Properties -->
+            <props>
+                <prop key="com.atomikos.icatch.service">com.atomikos.icatch.standalone.UserTransactionServiceFactory</prop>
+                <prop key="com.atomikos.icatch.hide_init_file_path">true</prop>
+<!--                 <prop key="com.atomikos.icatch.no_file">true</prop> -->
+                <prop key="com.atomikos.icatch.console_log_level">WARN</prop>
+                <prop key="com.atomikos.icatch.file">jta.properties</prop>
+            </props>
+        </property>
+    </bean>
+    <bean id="random" class="java.lang.Integer">
+        <constructor-arg value="#{new java.util.Random().nextInt(1000000000)}"/>
+    </bean>
+	<bean id="entityManagerFactory"
+        class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="persistenceXmlLocation" value="classpath:META-INF/persistence.xml" />
+        <property name="persistenceUnitName" value="myEntity" />
+        <property name="dataSource" ref="testDataSourceXA" />
+        <property name="jpaVendorAdapter" ref="jpaVendorAdapter" />
+        <property name="jpaDialect" ref="jpaDialect" />
+    </bean>
+ 
+    <bean id="jpaVendorAdapter"
+        class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+        <property name="database" value="MYSQL" />
+        <property name="databasePlatform" value="org.hibernate.dialect.MySQL5Dialect" />
+        <property name="showSql" value="true" />
+    </bean>
+ 
+    <bean id="jpaDialect" class="org.springframework.orm.jpa.vendor.HibernateJpaDialect" />
+ 
+<!--     <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager"> -->
+<!--         <property name="entityManagerFactory" ref="entityManagerFactory" /> -->
+<!--         <property name="dataSource" ref="testDataSourceXA" /> -->
+<!--         <property name="jpaDialect" ref="jpaDialect" /> -->
+<!--     </bean> -->
+
+    <bean id="testDataSource" class="com.atomikos.jdbc.nonxa.AtomikosNonXADataSourceBean" 
+            init-method="init" destroy-method="close" depends-on="setSystemProperties">
+       <property name="uniqueResourceName" value="#{random}$_DB" /> 
+       <property name="driverClassName" value="com.mysql.jdbc.Driver" /> 
+       <property name="url" value="jdbc:mysql://localhost:3306/demo2" /> 
+       <property name="user" value="root" />
+       <property name="password" value="baby123" />
+    </bean>
+	<bean id="testDataSourceXA" class="com.atomikos.jdbc.AtomikosDataSourceBean"
+		init-method="init" destroy-method="close" depends-on="testDataSource">
+		<property name="uniqueResourceName" value="#{random}$_DB_XA" />
+		<property name="xaDataSourceClassName" value="com.mysql.jdbc.jdbc2.optional.MysqlXADataSource" />
+		<property name="xaProperties">
+			<props>
+				<prop key="databaseName">demo2</prop>
+				<prop key="user">root</prop>
+				<prop key="password">baby123</prop>
+				<prop key="pinGlobalTxToPhysicalConnection">true</prop>
+			</props>
+		</property>
+	</bean>
+    <bean id="dataSource"
+        class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <property name="url" value="jdbc:mysql://localhost/demo" />
+        <property name="username" value="root" />
+        <property name="password" value="baby123" />
+    </bean>
+    <bean id="atomikosUserTransactionService" class="com.atomikos.icatch.config.UserTransactionServiceImp"
+            init-method="init" destroy-method="shutdownForce" depends-on="testDataSource,testDataSourceXA">
+        <constructor-arg>
+            <!-- IMPORTANT: specify all Atomikos properties here -->
+            <props>
+                <prop key="com.atomikos.icatch.service">com.atomikos.icatch.standalone.UserTransactionServiceFactory</prop>
+                <prop key="com.atomikos.icatch.output_dir">target/atomikos/#{random}/</prop>
+                <prop key="com.atomikos.icatch.log_base_dir">target/atomikos/#{random}/</prop>
+                <prop key="com.atomikos.icatch.console_log_level">WARN</prop>
+                <prop key="com.atomikos.icatch.threaded_2pc">false</prop>
+                <prop key="com.atomikos.icatch.enable_logging">false</prop>
+            </props>
+        </constructor-arg>
+    </bean>
+	<bean id="atomikosUserTransaction"  
+	      class="com.atomikos.icatch.jta.UserTransactionImp"   
+	      depends-on="atomikosUserTransactionService"> 
+	   <property name="transactionTimeout" value="300" /> 
+	</bean> 
+    <bean id="atomikosTransactionManager" class="com.atomikos.icatch.jta.UserTransactionManager"
+        init-method="init"
+        destroy-method="close"
+        depends-on="atomikosUserTransactionService">
+        <!-- Do not create a transaction service as we have specified the bean in this file -->
+        <property name="startupTransactionService" value="false" />
+        <property name="transactionTimeout" value="300" />
+    </bean>
+	<bean id="transactionManager"
+		class="org.springframework.transaction.jta.JtaTransactionManager">
+		<property name="transactionManager" ref="atomikosTransactionManager" />
+		<property name="userTransaction" ref="atomikosUserTransaction" />
+	</bean>
+
 </beans>        

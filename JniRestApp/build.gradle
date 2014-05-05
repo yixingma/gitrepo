@@ -21,6 +21,7 @@ war {
 }
 
 repositories {
+	maven { url "http://repository.jboss.org/nexus/content/groups/public"}
     mavenCentral()
     maven { url "http://repo.spring.io/libs-snapshot" }
     maven { url "http://repository.jboss.org/nexus/content/groups/public-jboss/"}
@@ -30,15 +31,27 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-web")
     compile("org.springframework.boot:spring-boot-starter-websocket")
     compile("org.springframework:spring-messaging")
+    compile("org.springframework:spring-context-support")
+    compile("org.springframework:spring-aspects")
+    compile("org.springframework:spring-aop")
+    compile("org.springframework:spring-orm")
+    compile("org.springframework:spring-oxm")
+    compile("org.springframework:spring-jdbc")
+    compile("org.springframework:spring-tx")
+    compile("org.springframework:spring-test")
     compile("com.fasterxml.jackson.core:jackson-databind")
     compile("org.thymeleaf:thymeleaf-spring4")
     compile("commons-codec:commons-codec:1.5")
+    compile("org.hibernate:hibernate-core:4.3.5.Final")
+    compile("org.hibernate:hibernate-entitymanager:4.3.5.Final")
+    compile("com.atomikos:transactions-jta:3.9.3")
+    compile("com.atomikos:transactions-jdbc:3.9.3")
+    compile("com.atomikos:transactions-hibernate3:3.9.3")
+    compile("commons-lang:commons-lang:2.6")
+    compile("mysql:mysql-connector-java:5.1.30")
     compile group: 'commons-io', name: 'commons-io', version: '2.0.1'
     compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.+'
     compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.+'
-    compile group: 'org.hibernate.ogm', name: 'hibernate-ogm-core', version: '4.1.0.Beta1'
-    compile group: 'org.hibernate.ogm', name: 'hibernate-ogm-mongodb', version: '4.1.0.Beta1'
-    testCompile group: 'org.hibernate.javax.persistence', name: 'hibernate-jpa-2.0-api', version: '1.0.1.Final'
     testCompile("junit:junit")
 }
 
