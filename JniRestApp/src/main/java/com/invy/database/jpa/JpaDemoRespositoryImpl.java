@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 import com.invy.database.DemoRepository;
 import com.invy.database.jpa.data.Itemref;
 import com.invy.database.jpa.data.Kit;
+import com.invy.database.jpa.data.Kittype;
 
 /**
  * @author ema
@@ -59,7 +60,7 @@ public class JpaDemoRespositoryImpl implements DemoRepository {
 	@Override
 	public <T> T addObject(T obj) {
 		entityManager.persist(obj);
-        return obj;
+		return obj;
 	}
 
 	@Override
@@ -72,6 +73,13 @@ public class JpaDemoRespositoryImpl implements DemoRepository {
 	public <T> void logObject(T obj) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public List<Kittype> getAllKitType() {
+		return entityManager.createNamedQuery(
+				"GET_ALL_KITTYPES_WITH_SUBKITTYPES", Kittype.class)
+				.getResultList();
 	}
 
 }

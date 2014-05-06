@@ -32,14 +32,6 @@ public class Subkittype implements Serializable {
 	@OneToMany(mappedBy="subkittype")
 	private Set<Optitemtemplate> optitemtemplates;
 
-	//bi-directional many-to-one association to Requestimage
-	@OneToMany(mappedBy="subkittype")
-	private Set<Requestimage> requestimages;
-
-	//bi-directional many-to-one association to Subkit
-	@OneToMany(mappedBy="subkittype")
-	private Set<Subkit> subkits;
-
 	//bi-directional many-to-one association to Kittype
     @ManyToOne
 	@JoinColumn(name="KitTypeID", nullable=false)
@@ -86,22 +78,6 @@ public class Subkittype implements Serializable {
 
 	public void setOptitemtemplates(Set<Optitemtemplate> optitemtemplates) {
 		this.optitemtemplates = optitemtemplates;
-	}
-	
-	public Set<Requestimage> getRequestimages() {
-		return this.requestimages;
-	}
-
-	public void setRequestimages(Set<Requestimage> requestimages) {
-		this.requestimages = requestimages;
-	}
-	
-	public Set<Subkit> getSubkits() {
-		return this.subkits;
-	}
-
-	public void setSubkits(Set<Subkit> subkits) {
-		this.subkits = subkits;
 	}
 	
 	public Kittype getKittype() {

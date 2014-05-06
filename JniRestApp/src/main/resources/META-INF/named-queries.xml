@@ -23,4 +23,10 @@
             FROM Itemref k WHERE UPPER(k.name) LIKE :name
         </query>
 	</named-query>
+	<named-query name="GET_ALL_KITTYPES_WITH_SUBKITTYPES">
+		<query>
+            SELECT DISTINCT k
+            FROM Kittype k
+        </query>
+	</named-query>
 </entity-mappings>

@@ -25,14 +25,6 @@ public class Kittype implements Serializable {
 	@Column(name="Name", length=20)
 	private String name;
 
-	//bi-directional many-to-one association to Kit
-	@OneToMany(mappedBy="kittype")
-	private Set<Kit> kits;
-
-	//bi-directional many-to-one association to Requestmaster
-	@OneToMany(mappedBy="kittype")
-	private Set<Requestmaster> requestmasters;
-
 	//bi-directional many-to-one association to Subkittype
 	@OneToMany(mappedBy="kittype")
 	private Set<Subkittype> subkittypes;
@@ -62,22 +54,6 @@ public class Kittype implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public Set<Kit> getKits() {
-		return this.kits;
-	}
-
-	public void setKits(Set<Kit> kits) {
-		this.kits = kits;
-	}
-	
-	public Set<Requestmaster> getRequestmasters() {
-		return this.requestmasters;
-	}
-
-	public void setRequestmasters(Set<Requestmaster> requestmasters) {
-		this.requestmasters = requestmasters;
 	}
 	
 	public Set<Subkittype> getSubkittypes() {
