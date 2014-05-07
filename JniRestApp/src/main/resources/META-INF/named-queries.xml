@@ -4,7 +4,7 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm
         http://java.sun.com/xml/ns/persistence/orm_1_0.xsd ">
 
-	<named-query name="GET_KITS_BY_USERID">
+	<named-query name="SEARCH_KITS_BY_USERID">
 		<query>
             SELECT DISTINCT k 
             FROM Kit k
@@ -27,6 +27,14 @@
 		<query>
             SELECT DISTINCT k
             FROM Kittype k
+            JOIN FETCH k.subkittypes
+        </query>
+	</named-query>
+	<named-query name="SEARCH_OWNER_LOCATION_BY_USERID">
+		<query>
+            SELECT DISTINCT o 
+            FROM Owner o
+            WHERE o.userId = :userID
         </query>
 	</named-query>
 </entity-mappings>

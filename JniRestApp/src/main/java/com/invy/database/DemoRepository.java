@@ -5,15 +5,18 @@ import java.util.List;
 import com.invy.database.jpa.data.Itemref;
 import com.invy.database.jpa.data.Kit;
 import com.invy.database.jpa.data.Kittype;
+import com.invy.database.jpa.data.Owner;
 
 public interface DemoRepository {
-	List<Kit> getKitsByUserId(String userId);
+	List<Kit> searchKitsByUserId(String userId);
 
 	List<Itemref> getAllItemrefs();
 
 	List<Itemref> searchItemrefsByName(String name);
 
-	List<Kittype> getAllKitType();
+	List<Kittype> getAllKitTypes();
+	
+	Owner searchOwnerByUserId(String userId);
 	/**
 	 * addObject
 	 * 

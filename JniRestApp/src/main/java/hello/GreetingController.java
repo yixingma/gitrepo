@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.invy.database.DemoRepository;
 import com.invy.database.jpa.data.Itemref;
 import com.invy.database.jpa.data.Kit;
+import com.invy.database.jpa.data.Kittype;
 import com.invy.database.jpa.data.Location;
 import com.invy.database.jpa.data.Owner;
 
@@ -85,7 +86,7 @@ public class GreetingController {
 	public @ResponseBody
 	List<ItemInstance> uploadKits(@RequestBody final List<KitPojo> kits) {
 		LOG.info("TX:"+TransactionSynchronizationManager.getCurrentTransactionName()+TransactionSynchronizationManager.isActualTransactionActive());
-		List<Kit> kitDatas = demoRepository.getKitsByUserId("jdoe");
+		List<Kit> kitDatas = demoRepository.searchKitsByUserId("jdoe");
 		for(Kit kitData:kitDatas){
 			LOG.info("kitData = "+kitData);
 		}
@@ -97,15 +98,48 @@ public class GreetingController {
 //		Location location = new Location();
 //		location.setName("root");
 //		location.setType("root");
-		Location location = demoRepository.findById(1, Location.class);
-		LOG.info("Location = "+location);
+//		Location location = demoRepository.findById(1, Location.class);
+//		LOG.info("Location = "+location);
+//		Owner owner = new Owner();
+//		owner.setFirstname("Ethan");
+//		owner.setLastname("Ma");
+//		owner.setLocation(location);
+//		owner.setUserId("ema");
+//		
+//		demoRepository.addObject(owner);
+		
+//		Kittype kitType = new Kittype();
+//		Set<Subkittype> subkitTypes = new HashSet<>();
+//		Subkittype subkitType = new Subkittype();
+//		subkitType.setDescription("Tray2");
+//		subkitType.setName("Tray2");
+//		subkitType.setSubkitSequence(2);
+//		subkitType.setKittype(kitType);
+//		subkitTypes.add(subkitType);
+//		kitType.setName("kit1");
+//		kitType.setDescription("First kit type");
+//		kitType.setSubkittypes(subkitTypes);
+		LOG.info("Add object");
+		Location location = new Location();
+		location.setDescription("HQ");
+		location.setName("Headquarter");
+		location.setType("HQ");
+		Location location2 = demoRepository.findById(1, Location.class);
+		location.setLocation(location2);
+		demoRepository.addObject(location);
 		Owner owner = new Owner();
-		owner.setFirstname("Ethan");
+		owner.setFirstname("June");
 		owner.setLastname("Ma");
 		owner.setLocation(location);
-		owner.setUserId("ema");
-		LOG.info("Add object");
+		owner.setUserId("jma");
 		demoRepository.addObject(owner);
+		
+		Owner owner2 = demoRepository.searchOwnerByUserId("jma");
+		LOG.info("owner2 = "+owner2);
+		List<Kittype> kitTypes = demoRepository.getAllKitTypes();
+		for(Kittype kitType1:kitTypes){
+			LOG.info("kitType1 = "+kitType1);
+		}
 		LOG.info("Add object done!");
 		List<Itemref> itemRefs = demoRepository.getAllItemrefs();
 		for(Itemref itemRef:itemRefs){

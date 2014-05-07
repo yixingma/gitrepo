@@ -1,7 +1,11 @@
 package com.invy.database.jpa.data;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
+
+import org.apache.commons.lang.builder.ToStringBuilder;
+
 import java.util.Set;
 
 
@@ -26,7 +30,7 @@ public class Kittype implements Serializable {
 	private String name;
 
 	//bi-directional many-to-one association to Subkittype
-	@OneToMany(mappedBy="kittype")
+	@OneToMany(mappedBy="kittype", cascade=CascadeType.ALL)
 	private Set<Subkittype> subkittypes;
 
     public Kittype() {
@@ -64,4 +68,8 @@ public class Kittype implements Serializable {
 		this.subkittypes = subkittypes;
 	}
 	
+	@Override
+    public final String toString() {
+        return ToStringBuilder.reflectionToString(this);
+    }
 }

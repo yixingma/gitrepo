@@ -15,6 +15,8 @@ import com.invy.database.DemoRepository;
 import com.invy.database.jpa.data.Itemref;
 import com.invy.database.jpa.data.Kit;
 import com.invy.database.jpa.data.Kittype;
+import com.invy.database.jpa.data.Location;
+import com.invy.database.jpa.data.Owner;
 
 /**
  * @author ema
@@ -31,9 +33,9 @@ public class JpaDemoRespositoryImpl implements DemoRepository {
 	 * @see com.invy.database.DemoRepository#getKitsByUserId(java.lang.String)
 	 */
 	@Override
-	public List<Kit> getKitsByUserId(String userId) {
+	public List<Kit> searchKitsByUserId(String userId) {
 		List<Kit> kits = entityManager
-				.createNamedQuery("GET_KITS_BY_USERID", Kit.class)
+				.createNamedQuery("SEARCH_KITS_BY_USERID", Kit.class)
 				.setParameter("userID", userId).getResultList();
 		return kits;
 	}
@@ -76,10 +78,18 @@ public class JpaDemoRespositoryImpl implements DemoRepository {
 	}
 
 	@Override
-	public List<Kittype> getAllKitType() {
+	public List<Kittype> getAllKitTypes() {
 		return entityManager.createNamedQuery(
 				"GET_ALL_KITTYPES_WITH_SUBKITTYPES", Kittype.class)
 				.getResultList();
+	}
+
+	@Override
+	public Owner searchOwnerByUserId(String userId) {
+		Owner owner = entityManager
+				.createNamedQuery("SEARCH_OWNER_LOCATION_BY_USERID", Owner.class)
+				.setParameter("userID", userId).getSingleResult();
+		return owner;
 	}
 
 }

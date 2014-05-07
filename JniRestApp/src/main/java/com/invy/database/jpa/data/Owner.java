@@ -1,7 +1,11 @@
 package com.invy.database.jpa.data;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
+
+import org.apache.commons.lang.builder.ToStringBuilder;
+
 import java.util.Set;
 
 
@@ -99,4 +103,8 @@ public class Owner implements Serializable {
 		this.location = location;
 	}
 	
+	@Override
+    public final String toString() {
+        return ToStringBuilder.reflectionToString(this);
+    }
 }
