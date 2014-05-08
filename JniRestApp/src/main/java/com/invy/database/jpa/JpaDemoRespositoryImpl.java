@@ -3,6 +3,7 @@
  */
 package com.invy.database.jpa;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -15,7 +16,6 @@ import com.invy.database.DemoRepository;
 import com.invy.database.jpa.data.Itemref;
 import com.invy.database.jpa.data.Kit;
 import com.invy.database.jpa.data.Kittype;
-import com.invy.database.jpa.data.Location;
 import com.invy.database.jpa.data.Owner;
 
 /**
@@ -87,9 +87,29 @@ public class JpaDemoRespositoryImpl implements DemoRepository {
 	@Override
 	public Owner searchOwnerByUserId(String userId) {
 		Owner owner = entityManager
-				.createNamedQuery("SEARCH_OWNER_LOCATION_BY_USERID", Owner.class)
-				.setParameter("userID", userId).getSingleResult();
+				.createNamedQuery("SEARCH_OWNER_LOCATION_BY_USERID",
+						Owner.class).setParameter("userID", userId)
+				.getSingleResult();
 		return owner;
+	}
+
+	@Override
+	public List<Owner> searchOwnersByUserName(String userName) {
+		String delims = "[ ]+";
+		String[] tokens = userName.split(delims);
+		List<Owner> owners = new ArrayList<>();
+		if (tokens.length > 1) {
+			owners = entityManager
+					.createNamedQuery("SEARCH_OWNERS_LOCATIONS_BY_FIRSTLASTNAME",
+							Owner.class).setParameter("firstName", tokens[0])
+					.setParameter("lastName", tokens[1]).getResultList();
+		} else if (tokens.length == 1) {
+			owners = entityManager
+					.createNamedQuery("SEARCH_OWNERS_LOCATIONS_BY_FIRSTNAME",
+							Owner.class).setParameter("firstName", tokens[0])
+					.getResultList();
+		}
+		return owners;
 	}
 
 }

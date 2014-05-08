@@ -37,4 +37,17 @@
             WHERE o.userId = :userID
         </query>
 	</named-query>
+	<named-query name="SEARCH_OWNERS_LOCATIONS_BY_FIRSTLASTNAME">
+		<query>
+            SELECT o 
+            FROM Owner o WHERE UPPER(o.firstname) LIKE :firstName
+        </query>
+	</named-query>
+	<named-query name="SEARCH_OWNERS_LOCATIONS_BY_FIRSTNAME">
+		<query>
+            SELECT o 
+            FROM Owner o WHERE UPPER(o.firstname) LIKE :firstName 
+            AND UPPER(o.lastname) LIKE :lastName
+        </query>
+	</named-query>
 </entity-mappings>

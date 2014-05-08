@@ -17,6 +17,8 @@ public interface DemoRepository {
 	List<Kittype> getAllKitTypes();
 	
 	Owner searchOwnerByUserId(String userId);
+	
+	List<Owner> searchOwnersByUserName(String userName);
 	/**
 	 * addObject
 	 * 

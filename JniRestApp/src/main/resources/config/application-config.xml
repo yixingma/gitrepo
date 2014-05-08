@@ -19,7 +19,7 @@
 		
 <!-- 	</bean> -->
 	<context:property-placeholder location="classpath:default.properties" />
-	    <bean id="setSystemProperties" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+	<bean id="setSystemProperties" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
         <property name="targetObject">
             <!-- System.getProperties() -->
             <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
