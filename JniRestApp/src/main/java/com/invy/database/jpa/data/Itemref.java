@@ -1,8 +1,13 @@
 package com.invy.database.jpa.data;
 
 import java.io.Serializable;
-import javax.persistence.*;
-import java.util.Set;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 
 /**
@@ -27,18 +32,6 @@ public class Itemref implements Serializable {
 
 	@Column(name="UnitPrice", nullable=false)
 	private double unitPrice;
-
-	//bi-directional many-to-one association to Item
-	@OneToMany(mappedBy="itemref")
-	private Set<Item> items;
-
-	//bi-directional many-to-one association to Itemtx
-	@OneToMany(mappedBy="itemref")
-	private Set<Itemtx> itemtxs;
-
-	//bi-directional many-to-one association to Optitemtemplate
-	@OneToMany(mappedBy="itemref")
-	private Set<Optitemtemplate> optitemtemplates;
 
     public Itemref() {
     }
@@ -73,30 +66,6 @@ public class Itemref implements Serializable {
 
 	public void setUnitPrice(double unitPrice) {
 		this.unitPrice = unitPrice;
-	}
-
-	public Set<Item> getItems() {
-		return this.items;
-	}
-
-	public void setItems(Set<Item> items) {
-		this.items = items;
-	}
-	
-	public Set<Itemtx> getItemtxs() {
-		return this.itemtxs;
-	}
-
-	public void setItemtxs(Set<Itemtx> itemtxs) {
-		this.itemtxs = itemtxs;
-	}
-	
-	public Set<Optitemtemplate> getOptitemtemplates() {
-		return this.optitemtemplates;
-	}
-
-	public void setOptitemtemplates(Set<Optitemtemplate> optitemtemplates) {
-		this.optitemtemplates = optitemtemplates;
 	}
 	
 }

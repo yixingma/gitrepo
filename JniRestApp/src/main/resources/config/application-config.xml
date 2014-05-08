@@ -8,7 +8,7 @@
             http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd 
             http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
     <tx:annotation-driven />
-    <context:component-scan  base-package="com.invy.database"/>
+    <context:component-scan  base-package="com.invy.database,com.invy.controller,com.invy.domain.mapper"/>
     <tx:jta-transaction-manager/>
 <!-- 	<bean id="propertyConfigurer" -->
 <!-- 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"> -->
