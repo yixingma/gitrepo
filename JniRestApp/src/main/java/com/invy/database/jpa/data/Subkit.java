@@ -26,7 +26,7 @@ public class Subkit implements Serializable {
 	private String name;
 
 	//bi-directional many-to-one association to Item
-	@OneToMany(mappedBy="subkit")
+	@OneToMany(mappedBy="subkit",cascade = CascadeType.ALL)
 	private Set<Item> items;
 
 	//bi-directional many-to-one association to Kit

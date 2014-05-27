@@ -33,7 +33,7 @@ public class Requestimage implements Serializable {
 	private Date updateDateTime;
 
 	//bi-directional many-to-one association to Itemtx
-	@OneToMany(mappedBy="requestimage")
+	@OneToMany(mappedBy="requestimage",cascade = CascadeType.ALL)
 	private Set<Itemtx> itemtxs;
 
 	//bi-directional many-to-one association to Requestmaster

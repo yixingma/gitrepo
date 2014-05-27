@@ -18,6 +18,8 @@ public interface DemoRepository {
 	
 	Owner searchOwnerByUserId(String userId);
 	
+	void updateItemQuantity(int itemId,int newQuantity);
+	
 	List<Owner> searchOwnersByUserName(String userName);
 	/**
 	 * addObject

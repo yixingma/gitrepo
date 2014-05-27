@@ -2,11 +2,16 @@ package com.invy.database.jpa.data;
 
 import java.io.Serializable;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
-
-import java.util.Set;
 
 
 /**
@@ -34,10 +39,6 @@ public class Owner implements Serializable {
 
 	@Column(name="UserId", nullable=false, length=20)
 	private String userId;
-
-	//bi-directional many-to-one association to Kit
-	@OneToMany(mappedBy="owner")
-	private Set<Kit> kits;
 
 	//bi-directional many-to-one association to Location
     @ManyToOne
@@ -85,14 +86,6 @@ public class Owner implements Serializable {
 
 	public void setUserId(String userId) {
 		this.userId = userId;
-	}
-
-	public Set<Kit> getKits() {
-		return this.kits;
-	}
-
-	public void setKits(Set<Kit> kits) {
-		this.kits = kits;
 	}
 	
 	public Location getLocation() {

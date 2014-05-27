@@ -11,8 +11,11 @@ import javax.persistence.PersistenceContext;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.invy.database.DemoRepository;
+import com.invy.database.jpa.data.Item;
 import com.invy.database.jpa.data.Itemref;
 import com.invy.database.jpa.data.Kit;
 import com.invy.database.jpa.data.Kittype;
@@ -110,6 +113,13 @@ public class JpaDemoRespositoryImpl implements DemoRepository {
 					.getResultList();
 		}
 		return owners;
+	}
+
+	@Override
+	@Transactional(propagation=Propagation.MANDATORY, rollbackFor=Exception.class)
+	public void updateItemQuantity(int itemId, int newQuantity) {
+		Item item = entityManager.find(Item.class, itemId);
+		item.setUnitNum(newQuantity);
 	}
 
 }
