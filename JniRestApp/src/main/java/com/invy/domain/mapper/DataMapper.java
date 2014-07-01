@@ -3,6 +3,7 @@
  */
 package com.invy.domain.mapper;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -17,12 +18,18 @@ import ma.glasnost.orika.impl.generator.JavassistCompilerStrategy;
 import ma.glasnost.orika.metadata.CaseInsensitiveClassMapBuilder;
 import ma.glasnost.orika.metadata.Type;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import com.invy.commons.tool.CompressionUtils;
+import com.invy.controller.RegisterNewKitController;
+import com.invy.database.jpa.data.Item;
 import com.invy.database.jpa.data.Kit;
 import com.invy.database.jpa.data.Requestimage;
 import com.invy.database.jpa.data.Requestmaster;
 import com.invy.database.jpa.data.Subkit;
+import com.invy.endpoint.ItemBinding;
 import com.invy.endpoint.RegisterNewKitRequest;
 
 /**
@@ -31,6 +38,25 @@ import com.invy.endpoint.RegisterNewKitRequest;
  */
 @Component
 public class DataMapper extends ConfigurableMapper {
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(DataMapper.class);
+
+	private static class ItemToItemBindingConverter extends
+			CustomConverter<Item, ItemBinding> {
+
+		@Override
+		public ItemBinding convert(Item item,
+				Type<? extends ItemBinding> destinationType) {
+			ItemBinding itemBinding = new ItemBinding();
+			itemBinding.setItemId(item.getId());
+			itemBinding.setItemrefId(item.getItemref().getId());
+			itemBinding.setDescription(item.getItemref().getDescription());
+			itemBinding.setName(item.getItemref().getName());
+			itemBinding.setUnitNum(item.getUnitNum());
+			return itemBinding;
+		}
+	}
+
 	private static class RegisterNewKitRequestToRequestMasterConverter extends
 			CustomConverter<RegisterNewKitRequest, Requestmaster> {
 
@@ -90,8 +116,17 @@ public class DataMapper extends ConfigurableMapper {
 			Set<Requestimage> requestImages = new HashSet<>();
 			Requestimage requestImage = new Requestimage();
 			requestImage.setCreateDateTime(createAndUpdateTime);
-			requestImage.setRequestImage(registerNewKitRequest.getKitBinding()
-					.getSubkitBindings().get(0).getImage());
+			byte[] rawImage = registerNewKitRequest.getKitBinding()
+					.getSubkitBindings().get(0).getImage();
+			byte[] compressedImage=null;
+			try {
+				compressedImage = CompressionUtils.compress(rawImage);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				LOGGER.error(e.getMessage());
+			}
+			requestImage.setRequestImage(compressedImage);
 			requestImage.setRequestmaster(requestmaster);
 			requestImage.setUpdateDateTime(createAndUpdateTime);
 			// requestImage.setSubkittype();
@@ -101,7 +136,6 @@ public class DataMapper extends ConfigurableMapper {
 		}
 	}
 
-
 	@Override
 	public void configure(MapperFactory mapperFactory) {
 
@@ -109,6 +143,7 @@ public class DataMapper extends ConfigurableMapper {
 		converterFactory
 				.registerConverter(new RegisterNewKitRequestToRequestMasterConverter(
 						this));
+		converterFactory.registerConverter(new ItemToItemBindingConverter());
 	}
 
 	public void configureFactoryBuilder(DefaultMapperFactory.Builder builder) {

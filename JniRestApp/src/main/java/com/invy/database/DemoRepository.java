@@ -46,4 +46,18 @@ public interface DemoRepository {
 	 *            the obj
 	 */
 	<T> void logObject(T obj);
+	/**
+     * remove Data.
+     * 
+     * @param <T> the generic type
+     * @param obj the obj
+     */
+    <T> void removeObject(final T obj);
+
+	/**
+	 * remove all items based on subkitId.
+	 * 
+	 * @param Integer the subkitId
+	 */
+    int removeAllItemsBySubkitId(Integer subkitId);
 }

@@ -52,7 +52,7 @@ public class GreetingController {
 		// }
 
 		List<ItemInstance> l2 = helloJNI.getElementsFilePath(
-				"D:\\Workspace\\sandbox\\invy\\Test Pattern 1.jpg", 1);
+				"D:\\Workspace\\sandbox\\invy\\Test Pattern 1.jpg", 1,1);
 
 		for (ItemInstance s2 : l2) {
 			System.out.println("s2=" + s2);
@@ -119,7 +119,7 @@ public class GreetingController {
 //		kitType.setName("kit1");
 //		kitType.setDescription("First kit type");
 //		kitType.setSubkittypes(subkitTypes);
-		LOG.info("Add object");
+		/*LOG.info("Add object");
 		Location location = new Location();
 		location.setDescription("HQ");
 		location.setName("Headquarter");
@@ -148,7 +148,7 @@ public class GreetingController {
 		List<Itemref> itemRefs2 = demoRepository.searchItemrefsByName("te");
 		for(Itemref itemRef:itemRefs2){
 			LOG.info("itemRef2 = "+itemRef);
-		}
+		}*/
 		HelloJNI helloJNI = new HelloJNI();
 		List<ItemInstance> l2 = new ArrayList<ItemInstance>();
 		for (KitPojo kit : kits) {
@@ -156,7 +156,7 @@ public class GreetingController {
 			LOG.info("kit description = " + kit.getDescription());
 			// LOG.info("kit image = " + new String(kit.getImage()));
 			// byte[] decoded = Base64.decodeBase64(kit.getImage());
-			l2 = helloJNI.getElementsByteArray(kit.getImage(), 1);
+			l2 = helloJNI.getElementsByteArray(kit.getImage(), 1,1);
 			for (ItemInstance s2 : l2) {
 				LOG.info("s2 name=" + s2.getName());
 				LOG.info("s2 id=" + s2.getId());

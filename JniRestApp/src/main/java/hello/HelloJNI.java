@@ -21,7 +21,7 @@ public class HelloJNI {
 //
 //	protected native List<String> getNumberOfElements(String filePath);
 	
-	protected native List<ItemInstance> getElementsByteArray(byte[] img, int kitNum);
+	public native List<ItemInstance> getElementsByteArray(byte[] img, int kitNum,int subkitNum);
     
-    protected native List<ItemInstance> getElementsFilePath(String imagePath, int kitNum);
+    public native List<ItemInstance> getElementsFilePath(String imagePath, int kitNum,int subkitNum);
 }

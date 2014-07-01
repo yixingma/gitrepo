@@ -9,63 +9,84 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-
 /**
  * The persistent class for the itemref database table.
  * 
  */
 @Entity
-@Table(name="itemref")
+@Table(name = "itemref")
 public class Itemref implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="ID", unique=true, nullable=false)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "ID", unique = true, nullable = false, updatable = false)
 	private int id;
 
-	@Column(name="Description", length=50)
+	@Column(name = "Description", length = 50, updatable = false)
 	private String description;
 
-	@Column(name="Name", nullable=false, length=20)
+	@Column(name = "Name", nullable = false, length = 20, updatable = false)
 	private String name;
 
-	@Column(name="UnitPrice", nullable=false)
+	@Column(name = "UnitPrice", nullable = false, updatable = false)
 	private double unitPrice;
 
-    public Itemref() {
-    }
+	@Column(name = "catalogNumber", updatable = false)
+	private String catalogNumber;
 
-	public int getId() {
-		return this.id;
+	@Column(name = "UnitClass", updatable = false)
+	private String unitClass;
+
+	public Itemref() {
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public String getCatalogNumber() {
+		return catalogNumber;
 	}
 
 	public String getDescription() {
 		return this.description;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	public int getId() {
+		return this.id;
 	}
 
 	public String getName() {
 		return this.name;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public String getUnitClass() {
+		return unitClass;
 	}
 
 	public double getUnitPrice() {
 		return this.unitPrice;
 	}
 
-	public void setUnitPrice(double unitPrice) {
+	public void setCatalogNumber(final String catalogNumber) {
+		this.catalogNumber = catalogNumber;
+	}
+
+	public void setDescription(final String description) {
+		this.description = description;
+	}
+
+	public void setId(final int id) {
+		this.id = id;
+	}
+
+	public void setName(final String name) {
+		this.name = name;
+	}
+
+	public void setUnitClass(final String unitClass) {
+		this.unitClass = unitClass;
+	}
+
+	public void setUnitPrice(final double unitPrice) {
 		this.unitPrice = unitPrice;
 	}
-	
+
 }

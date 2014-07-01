@@ -18,6 +18,8 @@ public class ItemBinding implements Serializable{
 	private int unitNum;
 	private String name;
 	private String description;
+	private int itemrefId;
+	
 	public int getItemId() {
 		return itemId;
 	}
@@ -41,6 +43,12 @@ public class ItemBinding implements Serializable{
 	}
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	public int getItemrefId() {
+		return itemrefId;
+	}
+	public void setItemrefId(int itemrefId) {
+		this.itemrefId = itemrefId;
 	}
 	
 }

@@ -9,7 +9,7 @@ import java.io.Serializable;
  * @author ema
  *
  */
-public class CommonTrasactionResponse implements Serializable{
+public class CommonTransactionResponse implements Serializable{
 
 	/**
 	 * 

@@ -103,7 +103,8 @@ public class JpaDemoRespositoryImpl implements DemoRepository {
 		List<Owner> owners = new ArrayList<>();
 		if (tokens.length > 1) {
 			owners = entityManager
-					.createNamedQuery("SEARCH_OWNERS_LOCATIONS_BY_FIRSTLASTNAME",
+					.createNamedQuery(
+							"SEARCH_OWNERS_LOCATIONS_BY_FIRSTLASTNAME",
 							Owner.class).setParameter("firstName", tokens[0])
 					.setParameter("lastName", tokens[1]).getResultList();
 		} else if (tokens.length == 1) {
@@ -116,10 +117,23 @@ public class JpaDemoRespositoryImpl implements DemoRepository {
 	}
 
 	@Override
-	@Transactional(propagation=Propagation.MANDATORY, rollbackFor=Exception.class)
+	@Transactional(propagation = Propagation.MANDATORY, rollbackFor = Exception.class)
 	public void updateItemQuantity(int itemId, int newQuantity) {
 		Item item = entityManager.find(Item.class, itemId);
 		item.setUnitNum(newQuantity);
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.MANDATORY, rollbackFor = Exception.class)
+	public <T> void removeObject(T obj) {
+		entityManager.remove(obj);
+	}
+
+	@Override
+	public int removeAllItemsBySubkitId(Integer subkitId) {
+		String deleteSql = "DELETE FROM ITEM item WHERE item.subkit.id = :id";
+		return entityManager.createQuery(deleteSql)
+				.setParameter("id", subkitId).executeUpdate();
 	}
 
 }
