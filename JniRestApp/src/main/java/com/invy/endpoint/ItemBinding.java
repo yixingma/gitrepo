@@ -4,6 +4,7 @@
 package com.invy.endpoint;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 /**
  * @author ema
@@ -19,7 +20,14 @@ public class ItemBinding implements Serializable{
 	private String name;
 	private String description;
 	private int itemrefId;
+	private BigDecimal unitPrice;
 	
+	public BigDecimal getUnitPrice() {
+		return unitPrice;
+	}
+	public void setUnitPrice(BigDecimal unitPrice) {
+		this.unitPrice = unitPrice;
+	}
 	public int getItemId() {
 		return itemId;
 	}

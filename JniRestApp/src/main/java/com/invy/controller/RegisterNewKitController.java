@@ -159,6 +159,7 @@ public class RegisterNewKitController {
 		KitBinding kitBinding = registerNewKitRequest.getKitBinding();
 		registerNewKitResponse.setKitBinding(kitBinding);
 		kitBinding.getSubkitBindings().get(0).setItemBindings(itemBindings);
+		kitBinding.setKitId(requestMaster.getKit().getId());
 		//TODO: If the subkittype is the last subkittype, set kit completion equals true
 		
 		LOGGER.info("RegisterNewKitResponse {}", registerNewKitResponse);
@@ -321,7 +322,7 @@ public class RegisterNewKitController {
 	public @ResponseBody
 	UpdateSubkitResponse updateSubkit(@RequestBody final UpdateSubkitRequest updateSubkitRequest){
 
-		LOGGER.info("UpdateSubkitResponse ID {}",
+		LOGGER.info("UpdateSubkitRequest ID {}",
 				updateSubkitRequest.getRequestId());
 		int kitId = updateSubkitRequest.getKitBinding().getKitId();
 		LOGGER.info("kitId {}", kitId);
@@ -405,10 +406,10 @@ public class RegisterNewKitController {
 		requestImage.setItemtxs(itemtxs);
 		//
 		UpdateSubkitResponse updateSubkitResponse = new UpdateSubkitResponse();
-		updateSubkitResponse.setRequestId(updateSubkitResponse.getRequestId());
-		updateSubkitResponse.setTransactionId(updateSubkitResponse
+		updateSubkitResponse.setRequestId(updateSubkitRequest.getRequestId());
+		updateSubkitResponse.setTransactionId(updateSubkitRequest
 				.getTransactionId());
-		updateSubkitResponse.setTransactionSequenceNumber(updateSubkitResponse
+		updateSubkitResponse.setTransactionSequenceNumber(updateSubkitRequest
 				.getTransactionSequenceNumber());
 		KitBinding kitBinding = updateSubkitRequest.getKitBinding();
 		updateSubkitResponse.setKitBinding(kitBinding);

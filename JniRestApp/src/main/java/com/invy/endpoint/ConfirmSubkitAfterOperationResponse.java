@@ -4,29 +4,30 @@
 package com.invy.endpoint;
 
 import java.io.Serializable;
+import java.util.Map;
 
 /**
  * @author ema
  * 
  */
-public class CompareKitWithExistingRequest implements Serializable {
+public class ConfirmSubkitAfterOperationResponse implements Serializable {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1642519976575911715L;
-	private String createByUsername;
+	private static final long serialVersionUID = -8569011487041725402L;
 	private int transactionSequenceNumber;
 	private String transactionId;
 	private int requestId;
 	private KitBinding kitBinding;
+	private Map<Integer, ItemCharge> itemChargeMap;
 
-	public String getCreateByUsername() {
-		return createByUsername;
+	public Map<Integer, ItemCharge> getItemChargeMap() {
+		return itemChargeMap;
 	}
 
-	public void setCreateByUsername(String createByUsername) {
-		this.createByUsername = createByUsername;
+	public void setItemChargeMap(Map<Integer, ItemCharge> itemChargeMap) {
+		this.itemChargeMap = itemChargeMap;
 	}
 
 	public int getTransactionSequenceNumber() {
@@ -60,4 +61,5 @@ public class CompareKitWithExistingRequest implements Serializable {
 	public void setKitBinding(KitBinding kitBinding) {
 		this.kitBinding = kitBinding;
 	}
+
 }

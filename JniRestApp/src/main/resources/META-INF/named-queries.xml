@@ -50,4 +50,28 @@
             AND UPPER(o.lastname) LIKE :lastName
         </query>
 	</named-query>
+	<named-query name="REMOVE_ALL_ITEMS_BY_SUBKITID">
+        <query>
+            DELETE FROM Item i WHERE i.subkit.id = :id
+        </query>
+    </named-query>
+    <named-query name="SEARCH_OPTITEMS_BY_SUBKIT_AND_TEMPLATE">
+        <query>
+            SELECT o 
+            FROM Optitemtemplate o WHERE o.templateID = :templateId 
+            AND o.subkittype.id= :subkitTypeId
+        </query>
+    </named-query>
+    <named-query name="SEARCH_ITEMS_BY_SUBKITID">
+        <query>
+            SELECT o 
+            FROM Item o WHERE o.subkit.id = :subkitId
+        </query>
+    </named-query>
+    <named-query name="SEARCH_SUBKIT_BY_KITID_AND_SUBKITTYPEID">
+        <query>
+            SELECT s 
+            FROM Subkit s WHERE s.subkittype.id = :subkitTypeId AND s.kit.id=:kitId
+        </query>
+    </named-query>
 </entity-mappings>

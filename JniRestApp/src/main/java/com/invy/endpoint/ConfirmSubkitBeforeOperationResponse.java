@@ -9,25 +9,16 @@ import java.io.Serializable;
  * @author ema
  * 
  */
-public class CompareKitWithExistingRequest implements Serializable {
+public class ConfirmSubkitBeforeOperationResponse implements Serializable {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1642519976575911715L;
-	private String createByUsername;
+	private static final long serialVersionUID = -8569011487041725402L;
 	private int transactionSequenceNumber;
 	private String transactionId;
 	private int requestId;
 	private KitBinding kitBinding;
-
-	public String getCreateByUsername() {
-		return createByUsername;
-	}
-
-	public void setCreateByUsername(String createByUsername) {
-		this.createByUsername = createByUsername;
-	}
 
 	public int getTransactionSequenceNumber() {
 		return transactionSequenceNumber;
@@ -60,4 +51,5 @@ public class CompareKitWithExistingRequest implements Serializable {
 	public void setKitBinding(KitBinding kitBinding) {
 		this.kitBinding = kitBinding;
 	}
+
 }

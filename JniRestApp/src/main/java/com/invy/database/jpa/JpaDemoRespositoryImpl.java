@@ -10,6 +10,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +21,9 @@ import com.invy.database.jpa.data.Item;
 import com.invy.database.jpa.data.Itemref;
 import com.invy.database.jpa.data.Kit;
 import com.invy.database.jpa.data.Kittype;
+import com.invy.database.jpa.data.Optitemtemplate;
 import com.invy.database.jpa.data.Owner;
+import com.invy.database.jpa.data.Subkit;
 
 /**
  * @author ema
@@ -29,6 +33,8 @@ import com.invy.database.jpa.data.Owner;
 public class JpaDemoRespositoryImpl implements DemoRepository {
 	@PersistenceContext(unitName = "myEntity")
 	private transient EntityManager entityManager;
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(JpaDemoRespositoryImpl.class);
 
 	/*
 	 * (non-Javadoc)
@@ -63,6 +69,7 @@ public class JpaDemoRespositoryImpl implements DemoRepository {
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.MANDATORY, rollbackFor = Exception.class)
 	public <T> T addObject(T obj) {
 		entityManager.persist(obj);
 		return obj;
@@ -89,6 +96,9 @@ public class JpaDemoRespositoryImpl implements DemoRepository {
 
 	@Override
 	public Owner searchOwnerByUserId(String userId) {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("userID {}", userId);
+		}
 		Owner owner = entityManager
 				.createNamedQuery("SEARCH_OWNER_LOCATION_BY_USERID",
 						Owner.class).setParameter("userID", userId)
@@ -119,6 +129,9 @@ public class JpaDemoRespositoryImpl implements DemoRepository {
 	@Override
 	@Transactional(propagation = Propagation.MANDATORY, rollbackFor = Exception.class)
 	public void updateItemQuantity(int itemId, int newQuantity) {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("itemId {}", itemId);
+		}
 		Item item = entityManager.find(Item.class, itemId);
 		item.setUnitNum(newQuantity);
 	}
@@ -130,10 +143,50 @@ public class JpaDemoRespositoryImpl implements DemoRepository {
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.MANDATORY, rollbackFor = Exception.class)
 	public int removeAllItemsBySubkitId(Integer subkitId) {
-		String deleteSql = "DELETE FROM ITEM item WHERE item.subkit.id = :id";
-		return entityManager.createQuery(deleteSql)
+		return entityManager.createNamedQuery("REMOVE_ALL_ITEMS_BY_SUBKITID")
 				.setParameter("id", subkitId).executeUpdate();
+	}
+
+	@Override
+	public List<Optitemtemplate> searchOptitemsBySubkitAndTemplate(
+			int subkitTypeId, int templateId) {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("subkitTypeId {}", subkitTypeId);
+			LOGGER.debug("templateId {}", templateId);
+		}
+		List<Optitemtemplate> optItemsList = entityManager
+				.createNamedQuery("SEARCH_OPTITEMS_BY_SUBKIT_AND_TEMPLATE",
+						Optitemtemplate.class)
+				.setParameter("templateId", templateId)
+				.setParameter("subkitTypeId", subkitTypeId).getResultList();
+		return optItemsList;
+	}
+
+	@Override
+	public List<Item> searchItemsBySubkitId(int subkitId) {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("subkitId {}", subkitId);
+		}
+		List<Item> itemsList = entityManager
+				.createNamedQuery("SEARCH_ITEMS_BY_SUBKITID", Item.class)
+				.setParameter("subkitId", subkitId).getResultList();
+		return itemsList;
+	}
+
+	@Override
+	public List<Subkit> searchSubkitByKitIdAndSubkitTypeId(int kitId,
+			int subkitTypeId) {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("kitId {}", kitId);
+			LOGGER.debug("subkitTypeId {}", subkitTypeId);
+		}
+		List<Subkit> subkitList = entityManager
+				.createNamedQuery("SEARCH_SUBKIT_BY_KITID_AND_SUBKITTYPEID",
+						Subkit.class).setParameter("kitId", kitId)
+				.setParameter("subkitTypeId", subkitTypeId).getResultList();
+		return subkitList;
 	}
 
 }

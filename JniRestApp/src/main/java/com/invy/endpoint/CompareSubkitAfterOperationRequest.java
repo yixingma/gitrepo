@@ -1,24 +1,20 @@
-/**
- * 
- */
 package com.invy.endpoint;
 
 import java.io.Serializable;
 
-/**
- * @author ema
- * 
- */
-public class CompareKitWithExistingRequest implements Serializable {
+public class CompareSubkitAfterOperationRequest implements Serializable {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1642519976575911715L;
+	private static final long serialVersionUID = -1610004195486872270L;
 	private String createByUsername;
 	private int transactionSequenceNumber;
+
 	private String transactionId;
+
 	private int requestId;
+
 	private KitBinding kitBinding;
 
 	public String getCreateByUsername() {

@@ -2,10 +2,13 @@ package com.invy.database;
 
 import java.util.List;
 
+import com.invy.database.jpa.data.Item;
 import com.invy.database.jpa.data.Itemref;
 import com.invy.database.jpa.data.Kit;
 import com.invy.database.jpa.data.Kittype;
+import com.invy.database.jpa.data.Optitemtemplate;
 import com.invy.database.jpa.data.Owner;
+import com.invy.database.jpa.data.Subkit;
 
 public interface DemoRepository {
 	List<Kit> searchKitsByUserId(String userId);
@@ -16,11 +19,17 @@ public interface DemoRepository {
 
 	List<Kittype> getAllKitTypes();
 	
+	List<Optitemtemplate> searchOptitemsBySubkitAndTemplate(int subkitTypeId,int templateId);
+	
+	List<Item> searchItemsBySubkitId(int subkitId);
+	
 	Owner searchOwnerByUserId(String userId);
 	
 	void updateItemQuantity(int itemId,int newQuantity);
 	
 	List<Owner> searchOwnersByUserName(String userName);
+	
+	List<Subkit> searchSubkitByKitIdAndSubkitTypeId(int kitId, int subkitTypeId);
 	/**
 	 * addObject
 	 * 

@@ -23,14 +23,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import com.invy.commons.tool.CompressionUtils;
-import com.invy.controller.RegisterNewKitController;
 import com.invy.database.jpa.data.Item;
+import com.invy.database.jpa.data.Itemtx;
 import com.invy.database.jpa.data.Kit;
+import com.invy.database.jpa.data.Optitemtemplate;
 import com.invy.database.jpa.data.Requestimage;
 import com.invy.database.jpa.data.Requestmaster;
 import com.invy.database.jpa.data.Subkit;
 import com.invy.endpoint.ItemBinding;
+import com.invy.endpoint.KitBinding;
 import com.invy.endpoint.RegisterNewKitRequest;
+import com.invy.endpoint.SubkitBinding;
 
 /**
  * @author ema
@@ -57,6 +60,92 @@ public class DataMapper extends ConfigurableMapper {
 		}
 	}
 
+	private static class ItemTxToItemBindingConverter extends
+			CustomConverter<Itemtx, ItemBinding> {
+
+		@Override
+		public ItemBinding convert(Itemtx itemtx,
+				Type<? extends ItemBinding> destinationType) {
+			ItemBinding itemBinding = new ItemBinding();
+			itemBinding.setItemId(itemtx.getId());
+			itemBinding.setItemrefId(itemtx.getItemref().getId());
+			itemBinding.setDescription(itemtx.getItemref().getDescription());
+			itemBinding.setName(itemtx.getItemref().getName());
+			itemBinding.setUnitNum(itemtx.getUnitNum());
+			return itemBinding;
+		}
+	}
+	private static class OptitemtemplateToItemBindingConverter extends
+			CustomConverter<Optitemtemplate, ItemBinding> {
+
+		@Override
+		public ItemBinding convert(Optitemtemplate optitemTemplate,
+				Type<? extends ItemBinding> destinationType) {
+			ItemBinding itemBinding = new ItemBinding();
+			itemBinding.setItemrefId(optitemTemplate.getItemref().getId());
+			itemBinding.setDescription(optitemTemplate.getItemref().getDescription());
+			itemBinding.setName(optitemTemplate.getItemref().getName());
+			itemBinding.setUnitNum(optitemTemplate.getOptUnitNum());
+			itemBinding.setItemId(optitemTemplate.getId());
+			return itemBinding;
+		}
+	}
+	
+	private static class SubkitToSubkitBindingConverter extends
+	CustomConverter<Subkit, SubkitBinding> {
+		/** The mapper. */
+		final private MapperFacade mapper;
+
+		/**
+		 * 
+		 * @param mapper
+		 *            the mapper
+		 */
+		SubkitToSubkitBindingConverter(final MapperFacade mapper) {
+			this.mapper = mapper;
+		}
+		@Override
+		public SubkitBinding convert(Subkit subkit,
+				Type<? extends SubkitBinding> destinationType) {
+			SubkitBinding subkitBinding = new SubkitBinding();
+			subkitBinding.setItemBindings(mapper.mapAsList(subkit.getItems(), ItemBinding.class));
+			subkitBinding.setSubkitDescription(subkit.getDescription());
+			subkitBinding.setSubkitId(subkit.getId());
+			subkitBinding.setSubkitName(subkit.getName());
+			subkitBinding.setSubkitTypeId(subkit.getSubkittype().getId());
+			return subkitBinding;
+		}
+		
+	}
+	private static class KitToKitBindingConverter extends
+			CustomConverter<Kit, KitBinding> {
+		/** The mapper. */
+		final private MapperFacade mapper;
+
+		/**
+		 * 
+		 * @param mapper
+		 *            the mapper
+		 */
+		KitToKitBindingConverter(final MapperFacade mapper) {
+			this.mapper = mapper;
+		}
+		@Override
+		public KitBinding convert(Kit kit,
+				Type<? extends KitBinding> destinationType) {
+			KitBinding kitBinding = new KitBinding();
+			kitBinding.setKitDescription(kit.getDescription());
+			kitBinding.setKitId(kit.getId());
+			kitBinding.setKitName(kit.getName());
+			kitBinding.setKitTypeId(kit.getKittype().getId());
+			kitBinding.setOwnerId(kit.getOwner().getUserId());
+			kitBinding.setSetupComplete(kit.isSetupComplete());
+			kitBinding.setSubkitBindings(mapper.mapAsList(kit.getSubkits(), SubkitBinding.class));
+			return kitBinding;
+		}
+	}
+	
+	
 	private static class RegisterNewKitRequestToRequestMasterConverter extends
 			CustomConverter<RegisterNewKitRequest, Requestmaster> {
 
@@ -64,8 +153,6 @@ public class DataMapper extends ConfigurableMapper {
 		final private MapperFacade mapper;
 
 		/**
-		 * Instantiates a new member credit account data to member credit
-		 * account converter.
 		 * 
 		 * @param mapper
 		 *            the mapper
@@ -143,7 +230,12 @@ public class DataMapper extends ConfigurableMapper {
 		converterFactory
 				.registerConverter(new RegisterNewKitRequestToRequestMasterConverter(
 						this));
+		converterFactory.registerConverter(new ItemTxToItemBindingConverter());
 		converterFactory.registerConverter(new ItemToItemBindingConverter());
+		converterFactory.registerConverter(new OptitemtemplateToItemBindingConverter());
+		converterFactory.registerConverter(new SubkitToSubkitBindingConverter(this));
+		converterFactory.registerConverter(new KitToKitBindingConverter(this));
+		
 	}
 
 	public void configureFactoryBuilder(DefaultMapperFactory.Builder builder) {

@@ -1,33 +1,46 @@
-/**
- * 
- */
 package com.invy.endpoint;
 
 import java.io.Serializable;
+import java.util.Map;
+import java.util.Set;
 
-/**
- * @author ema
- * 
- */
-public class CompareKitWithExistingRequest implements Serializable {
-
+public class CompareSubkitBeforeOperationResponse implements Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1642519976575911715L;
-	private String createByUsername;
+	private static final long serialVersionUID = 2095821998105218101L;
 	private int transactionSequenceNumber;
 	private String transactionId;
 	private int requestId;
 	private KitBinding kitBinding;
+	private Map<Integer, ItemBinding> existingItems;
 
-	public String getCreateByUsername() {
-		return createByUsername;
+	public Map<Integer, ItemBinding> getExistingItems() {
+		return existingItems;
 	}
 
-	public void setCreateByUsername(String createByUsername) {
-		this.createByUsername = createByUsername;
+	public void setExistingItems(Map<Integer, ItemBinding> existingItems) {
+		this.existingItems = existingItems;
 	}
+
+	public Map<Integer, ItemBinding> getNewItems() {
+		return newItems;
+	}
+
+	public void setNewItems(Map<Integer, ItemBinding> newItems) {
+		this.newItems = newItems;
+	}
+
+	public Set<Integer> getDiffItemRefIds() {
+		return diffItemRefIds;
+	}
+
+	public void setDiffItemRefIds(Set<Integer> diffItemRefIds) {
+		this.diffItemRefIds = diffItemRefIds;
+	}
+
+	private Map<Integer, ItemBinding> newItems;
+	private Set<Integer> diffItemRefIds;
 
 	public int getTransactionSequenceNumber() {
 		return transactionSequenceNumber;
@@ -60,4 +73,5 @@ public class CompareKitWithExistingRequest implements Serializable {
 	public void setKitBinding(KitBinding kitBinding) {
 		this.kitBinding = kitBinding;
 	}
+
 }
